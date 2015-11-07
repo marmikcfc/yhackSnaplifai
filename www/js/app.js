@@ -77,7 +77,28 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
                 $scope.ftLoad = true;
                 var image = document.getElementById('myImage');
                 image.src = fileEntry.nativeURL;
-                uploadPicture();
+                //Upload Picture
+
+                     //uploadPicture
+
+        alert("into upload picture");
+       // $ionicLoading.show({template: 'Sto inviando la foto...'});
+        var fileURL = $scope.picData;
+        var options1 = new FileUploadOptions();
+        options1.fileKey = "file";
+        options1.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+        options1.mimeType = "image/jpeg";
+        options1.chunkedMode = true;
+
+        var params = {};
+        params.value1 = "someparams";
+        params.value2 = "otherparams";
+
+        options1.params = params;
+
+        var ft = new FileTransfer();
+        ft.upload(fileURL, encodeURI("http://21fb43a3.ngrok.com/upload"), function(success) {alert("success"+JSON.stringify(success.response));}, function(error) {alert("error"+JSON.stringify(error));}, options1);
+
             });
  //           $ionicLoading.show({template: 'Foto acquisita...', duration:500});
         },
