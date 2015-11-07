@@ -117,8 +117,26 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
         options1.params = params;
 
         var ft = new FileTransfer();
-        ft.upload(fileURL, encodeURI("http://21fb43a3.ngrok.com/upload"), function(success) {
+            ft.upload(fileURL, encodeURI("http://21fb43a3.ngrok.com/upload"), function(success) {
             alert("success"+JSON.stringify(success.response));
+            var fName=options1.fileName; 
+            var link=  "http://21fb43a3.ngrok.com/recognition";
+            alert("File Name"+fName);
+            $http.post(link, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
+                    
+                        alert(JSON.stringify(res.data));
+            
+            for(var i=0;i<res.data.length;i++) {
+                    alert(res.data[i].text);
+                    $scope.results.push(res.data[i].text);  
+              }
+
+                    if($scope.results == ""){
+                        $scope.results.push("COULDNT FIND IT");}
+                
+            }, function errorCallback(response) {
+                alert("ERROR"+JSON.stringify(response));
+        });
         }, 
         function(error) {alert("error"+JSON.stringify(error));}, options1);
 
