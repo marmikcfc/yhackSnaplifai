@@ -1,46 +1,92 @@
-angular.module('starter', ['ionic', 'ngCordova'])
+angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegateProvider) {
+  $sceDelegateProvider.resourceUrlWhitelist([
+    // Allow same origin resource loads.
+    'self',
+    // Allow loading from our assets domain.  Notice the difference between * and **.
+    '*'
+  ]);
 
-.controller("ExampleController", function ($scope, $cordovaCamera) {
+}).controller('CameraCtrl', function ($scope,$ionicPlatform,$ionicPlatform, $cordovaCamera, $ionicLoading) {
+    $scope.results = [];
+    $scope.cordovaReady = false;
 
-                $scope.takePhoto = function () {
-                  var options = {
-                    quality: 75,
-                    destinationType: Camera.DestinationType.DATA_URL,
-                    sourceType: Camera.PictureSourceType.CAMERA,
-                    allowEdit: true,
-                    encodingType: Camera.EncodingType.JPEG,
-                    targetWidth: 300,
-                    targetHeight: 300,
-                    popoverOptions: CameraPopoverOptions,
-                    saveToPhotoAlbum: false
-                };
-   
-                    $cordovaCamera.getPicture(options).then(function (imageData) {
-                        $scope.imgURI = "data:image/jpeg;base64," + imageData;
-                    }, function (err) {
-                        // An error occured. Show a message to the user
-                    });
-                }
-                
-                $scope.choosePhoto = function () {
-                  var options = {
-                    quality: 75,
-                    destinationType: Camera.DestinationType.DATA_URL,
-                    sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-                    allowEdit: true,
-                    encodingType: Camera.EncodingType.JPEG,
-                    targetWidth: 300,
-                    targetHeight: 300,
-                    popoverOptions: CameraPopoverOptions,
-                    saveToPhotoAlbum: false
-                };
-   
-                    $cordovaCamera.getPicture(options).then(function (imageData) {
-                        $scope.imgURI = "data:image/jpeg;base64," + imageData;
-                    }, function (err) {
-                        // An error occured. Show a message to the user
-                    });
-                }
-                
+    $ionicPlatform.ready(function() {   
+        $scope.$apply(function() {
+            $scope.cordovaReady = true;
+        });
+    });
 
+    $scope.data = { "ImageURI" :  "Select Image" };
+    $scope.takePhoto = function() {
+      var options = {
+        quality: 50,
+        destinationType: Camera.DestinationType.FILE_URL,
+        sourceType: Camera.PictureSourceType.CAMERA,
+        targetWidth: 300,
+        targetHeight: 300,
+        encodingType: Camera.EncodingType.JPEG
+      };
+      $cordovaCamera.getPicture(options).then(
+        function(imageData) {
+            $scope.picData = imageData;
+            $scope.ftLoad = true;
+//            $localstorage.set('fotoUp', imageData);
+          //  $ionicLoading.show({template: 'Foto acquisita...', duration:500});
+          //uploadPicture
+
+        alert("into upload picture");
+       // $ionicLoading.show({template: 'Sto inviando la foto...'});
+        var fileURL = $scope.picData;
+        var options1 = new FileUploadOptions();
+        options1.fileKey = "file";
+        options1.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+        options1.mimeType = "image/jpeg";
+        options1.chunkedMode = true;
+
+        var params = {};
+        params.value1 = "someparams";
+        params.value2 = "otherparams";
+
+        options1.params = params;
+
+        var ft = new FileTransfer();
+        ft.upload(fileURL, encodeURI("http://21fb43a3.ngrok.com/upload"), function(success) {alert("success"+JSON.stringify(success.response));}, function(error) {alert("error"+JSON.stringify(error));}, options1);
+
+
+
+        },
+        function(err){
+         //   $ionicLoading.show({template: 'Errore di caricamento...', duration:500});
+            })
+      }
+
+      $scope.choosePhoto = function() { 
+        var options = {
+            quality: 50,
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+            targetWidth: 300,
+            targetHeight: 300,
+            encodingType: Camera.EncodingType.JPEG
+        };
+
+      $cordovaCamera.getPicture(options).then(
+        function(imageURI) {
+            window.resolveLocalFileSystemURI(imageURI, function(fileEntry) {
+                $scope.picData = fileEntry.nativeURL;
+                $scope.ftLoad = true;
+                var image = document.getElementById('myImage');
+                image.src = fileEntry.nativeURL;
+                uploadPicture();
             });
+ //           $ionicLoading.show({template: 'Foto acquisita...', duration:500});
+        },
+        function(err){
+   //         $ionicLoading.show({template: 'Errore di caricamento...', duration:500});
+        })
+    };
+
+    $scope.uploadPicture = function() {
+          }
+
+});

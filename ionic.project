@@ -1,4 +1,13 @@
 {
-  "name": "CameraPluginDemo",
-  "app_id": ""
+  "name": "Snaplifai",
+  "app_id": "",
+   "proxies": [{
+     "path": "/test",
+     "proxyUrl": "http://21fb43a3.ngrok.com/test"
+   },
+   {
+     "path": "/upload",
+     "proxyUrl": "http://21fb43a3.ngrok.com/upload"
+   }]
+
 }

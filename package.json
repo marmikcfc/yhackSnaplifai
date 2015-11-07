@@ -1,5 +1,5 @@
 {
-  "name": "cameraplugindemo",
+  "name": "snalifai",
   "version": "1.0.0",
   "description": "CameraPluginDemo: An Ionic project",
   "dependencies": {
@@ -15,7 +15,8 @@
     "shelljs": "^0.3.0"
   },
   "cordovaPlugins": [
-    "com.ionic.keyboard"
+    "com.ionic.keyboard",
+    "cordova-plugin-whitelist"
   ],
   "cordovaPlatforms": [
     "ios",
