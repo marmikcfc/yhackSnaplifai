@@ -22,6 +22,9 @@
             Choose Photo
         </button>
 
+        <button class="button button-full button-assertive" ng-click="getKeyWords({{fileName}})">
+           Image Recognition
+        </button>
         
         <center>
         <img ng-show="picData !== undefined" id="image" ng-src="{{picData}}" style="text-align: center">

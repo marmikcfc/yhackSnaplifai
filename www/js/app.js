@@ -6,10 +6,10 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
     '*'
   ]);
 
-}).controller('CameraCtrl', function ($scope,$ionicPlatform,$ionicPlatform, $cordovaCamera, $ionicLoading) {
+}).controller('CameraCtrl', function ($scope,$ionicPlatform,$ionicPlatform, $cordovaCamera, $ionicLoading,$http) {
     $scope.results = [];
     $scope.cordovaReady = false;
-
+    $scope.fileName="";
     $ionicPlatform.ready(function() {   
         $scope.$apply(function() {
             $scope.cordovaReady = true;
@@ -50,9 +50,22 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
         options1.params = params;
 
         var ft = new FileTransfer();
-        ft.upload(fileURL, encodeURI("http://21fb43a3.ngrok.com/upload"), function(success) {alert("success"+JSON.stringify(success.response));}, function(error) {alert("error"+JSON.stringify(error));}, options1);
-
-
+        ft.upload(fileURL, encodeURI("http://21fb43a3.ngrok.com/upload"), function(success) {
+            alert("success"+JSON.stringify(success.response));
+            var fName=options1.fileName; 
+            var link=  "http://21fb43a3.ngrok.com/recognition";
+            alert("File Name"+fName);
+            $http.post(link, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
+                    $scope.$apply(function() {
+                        alert(JSON.stringify(res.response));
+                    $scope.results = JSON.parse(res.response);
+                });
+                
+            
+        });
+        }, 
+        function(error) {document.write("error"+JSON.stringify(error));},
+         options1);
 
         },
         function(err){
@@ -97,7 +110,10 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
         options1.params = params;
 
         var ft = new FileTransfer();
-        ft.upload(fileURL, encodeURI("http://21fb43a3.ngrok.com/upload"), function(success) {alert("success"+JSON.stringify(success.response));}, function(error) {alert("error"+JSON.stringify(error));}, options1);
+        ft.upload(fileURL, encodeURI("http://21fb43a3.ngrok.com/upload"), function(success) {
+            alert("success"+JSON.stringify(success.response));
+        }, 
+        function(error) {alert("error"+JSON.stringify(error));}, options1);
 
             });
  //           $ionicLoading.show({template: 'Foto acquisita...', duration:500});
@@ -107,7 +123,13 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
         })
     };
 
-    $scope.uploadPicture = function() {
+    $scope.getKeyWords = function(fileName) {
+
+              var link=  "http://21fb43a3.ngrok.com/recognition";
+              alert("File Name"+$scope.fileName);
+              $http.post(link, {imageURL : "http://21fb43a3.ngrok.com/"+fileName }).then(function (res){
+            $scope.results =  JSON.parse(res.text);
+        });
           }
 
 });
