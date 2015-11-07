@@ -56,7 +56,19 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
             var link=  "http://21fb43a3.ngrok.com/recognition";
             alert("File Name"+fName);
             $http.post(link, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
-            $scope.results =  JSON.parse(res.text);
+                    
+                        alert(JSON.stringify(res.data));
+            
+            for(var i=0;i<res.data.length;i++) {
+                    alert(res.data[i].text);
+                    $scope.results.push(res.data[i].text);  
+              }
+
+                    if($scope.results == ""){
+                        $scope.results.push("COULDNT FIND IT");}
+                
+            }, function errorCallback(response) {
+                alert("ERROR"+JSON.stringify(response));
         });
         }, 
         function(error) {document.write("error"+JSON.stringify(error));},
