@@ -181,7 +181,42 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
                 
             }, function errorCallback(response) {
                 alert("ERROR"+JSON.stringify(response));
-        })
+        }).finally(function(){
+
+                       alert("INSIDE FINALLY");
+                       alert("inside else and keyword is "+$scope.keywordString);
+
+           var binglink="http://21fb43a3.ngrok.com/searchResults";
+
+           $http.post(binglink, {keywords : $scope.keywordString }).then(function (res){
+                    alert("inside bing search api and keyword is "+$scope.keywordString);
+                    for(var i=0;i<res.data.length;i++) {
+                        alert(res.data[i].Title);
+                        $scope.bingResults.push(res.data[i]);  
+                    }
+                
+            }, function errorCallback(response) {
+                alert("ERROR"+JSON.stringify(response));
+        }).finally(function(){
+            alert("inside another finally");
+                var ocrLink="http://21fb43a3.ngrok.com/ocr"
+                $http.post(ocrLink, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
+                    
+                        alert(JSON.stringify(res.data));
+            
+                    ocrResult=res.data.summary;  
+              
+
+                    if($scope.ocrResults == ""){
+                        $scope.results.push("COULDNT FIND IT");}
+                
+            }, function errorCallback(response) {
+                alert("ERROR"+JSON.stringify(response));
+        });
+
+        });
+
+        });
         }, 
         function(error) {document.write("error"+JSON.stringify(error));},
          options1);
