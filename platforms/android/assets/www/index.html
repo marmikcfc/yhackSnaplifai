@@ -8,9 +8,11 @@
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="lib/ionic-material/dist/ionic.material.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link href="lib/Materialize/bin/materialize.css" rel="stylesheet">
+
 
     <script src="lib/ionic/js/ionic.bundle.js"></script>
-    <script src="lib/ionic-material/dist/ionic.material.min.js"></script>
+    <script src="lib/Materialize/bin/materialize.js"></script>
 
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     <script src="js/ng-cordova.min.js"></script>
@@ -30,36 +32,72 @@ function onDeviceReady() {
         <h1 class="title"> <center> Snaplify </center></h1>
     </ion-header-bar>
     <ion-content ng-controller="CameraCtrl" padding="true">
-        <button class="button button-full button-assertive" ng-click="takePhoto()">
-            Take Photo
-        </button>
 
-        <button class="button button-full button-assertive" ng-click="choosePhoto()">
-            Choose Photo
-        </button>
-        
-        <center>
-
-        <img  class="hero slide-up" id="image" ng-src="{{picData}}" style="text-align: center">
-
-                        <ion-list class="list-inset">
+   
+          <div class="card">
+            <div class="card-image">
+              <img ng-src="{{picData}}">
+                <span style="float:left; widgth:48%;">
+                   <button class="button button-full button-assertive" ng-click="takePhoto()">
+                        Take Photo
+                   </button>
+              </span>
+              <span style="float:right; width:48%">
+                  
+                   <button class="button button-full button-assertive" ng-click="choosePhoto()">
+                        Choose Photo
+                   </button>
+              </span>
+            </div>
+   
+          </div>
+     
+         <div class="card">
+            <div class="class="card-content blue-grey darken-1 white-text"">
+              Keywords Recognized
+            </div>
+            
+             <ion-list class="list-inset">
                     <ion-item ng-repeat="result in results">{{result}}</ion-item>
-                </ion-list>
+            </ion-list>
+          </div>
+        
 
 
-                <ion-list class="list-inset">
-                    <ion-item ng-repeat="result in bingResults"> <a ng-href="{{result.DisplayUrl}}" onclick="window.open(this.href, '_system', 'location=yes'); return false;"); return false;>{{result.Title}}</a>  <br />
-                    {{result.Description}}
-                    <br /> {{result.DisplayUrl}}
-                    </ion-item>
-                </ion-list>
+
+
 
                 <ion-list class="list-inset">
+                    <div ng-repeat="result in bingResults"> 
+                    <div class="card"> 
 
-                <ion-item>{{ocrResult}} </ion-item>
+                     <div class="card-content blue-grey darken-1 white-text">
+                                
+                                  <span class="card-title"> <a ng-href="{{result.DisplayUrl}}" onclick="window.open(this.href, '_system', 'location=yes'); return false;"); return false;>{{result.Title}}</a>  </span>
+                                </div>
 
+                                <div class="card-action">
+                                                {{result.Description}}
+              
+            </div>
+                               
+                    </div>
+                    </div>
+                </ion-list>
 
-                 </ion-list>
+                <div class="card ">
+            <div class="card-content blue-grey darken-1 white-text">
+              <span class="card-title">Text Summary</span>
+            </div>
+            <div class="card-content">
+                
+                <p>
+                  
+{{ocrResult}}
+              </p>
+            </div>
+          </div>
+
     </center>
     </ion-content>
 </body>
