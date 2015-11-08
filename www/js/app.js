@@ -88,6 +88,23 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
                 
             }, function errorCallback(response) {
                 alert("ERROR"+JSON.stringify(response));
+        }).finally(function(){
+            alert("inside another finally");
+                var ocrLink="http://21fb43a3.ngrok.com/ocr"
+                $http.post(ocrLink, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
+                    
+                        alert(JSON.stringify(res.data));
+            
+                    ocrResult=res.data.summary;  
+              
+
+                    if($scope.ocrResults == ""){
+                        $scope.results.push("COULDNT FIND IT");}
+                
+            }, function errorCallback(response) {
+                alert("ERROR"+JSON.stringify(response));
+        });
+
         });
 
         });

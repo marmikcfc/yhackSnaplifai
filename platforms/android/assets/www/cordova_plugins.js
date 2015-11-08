@@ -55,6 +55,14 @@ module.exports = [
         "runs": true
     },
     {
+        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+        "id": "cordova-plugin-inappbrowser.inappbrowser",
+        "clobbers": [
+            "cordova.InAppBrowser.open",
+            "window.open"
+        ]
+    },
+    {
         "file": "plugins/cordova-plugin-file/www/DirectoryEntry.js",
         "id": "cordova-plugin-file.DirectoryEntry",
         "clobbers": [
@@ -208,6 +216,7 @@ module.exports.metadata =
     "org.apache.cordova.camera": "0.3.6",
     "cordova-plugin-file-transfer": "1.3.0",
     "cordova-plugin-whitelist": "1.0.0",
+    "cordova-plugin-inappbrowser": "1.0.1",
     "cordova-plugin-file": "3.0.0"
 }
 // BOTTOM OF METADATA
