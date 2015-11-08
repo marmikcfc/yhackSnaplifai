@@ -5,6 +5,13 @@
     <title></title>
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="lib/ionic-material/dist/ionic.material.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/ionic-material/dist/ionic.material.min.js"></script>
+
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     <script src="js/ng-cordova.min.js"></script>
     <script src="cordova.js"></script>
@@ -35,7 +42,8 @@ function onDeviceReady() {
         </button>
         
         <center>
-        <img ng-show="picData !== undefined" id="image" ng-src="{{picData}}" style="text-align: center">
+
+        <img  class="hero slide-up" id="image" ng-src="{{picData}}" style="text-align: center">
 
                         <ion-list class="list-inset">
                     <ion-item ng-repeat="result in results">{{result}}</ion-item>

@@ -22,12 +22,16 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
 
     $scope.data = { "ImageURI" :  "Select Image" };
     $scope.takePhoto = function() {
+
+        $scope.results = [];
+        $scope.bingResults = [];
+        $scope.keywordString="";
       var options = {
-        quality: 50,
+        quality: 100,
         destinationType: Camera.DestinationType.FILE_URL,
         sourceType: Camera.PictureSourceType.CAMERA,
-        targetWidth: 300,
-        targetHeight: 300,
+        targetWidth: 400,
+        targetHeight: 400,
         encodingType: Camera.EncodingType.JPEG
       };
       $cordovaCamera.getPicture(options).then(
@@ -122,11 +126,11 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
 
       $scope.choosePhoto = function() { 
         var options = {
-            quality: 50,
+            quality: 100,
             destinationType: Camera.DestinationType.FILE_URI,
             sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-            targetWidth: 300,
-            targetHeight: 300,
+            targetWidth: 400,
+            targetHeight: 400,
             encodingType: Camera.EncodingType.JPEG
         };
 
@@ -200,7 +204,7 @@ alert("into upload picture");
                     
                         alert(JSON.stringify(res.data));
             
-                    ocrResult=res.data.summary;  
+                    $scope.ocrResult=res.data.summary;  
               
 
                     if($scope.ocrResults == ""){
