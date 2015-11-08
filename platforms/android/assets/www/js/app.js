@@ -125,6 +125,7 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
       }
 
       $scope.choosePhoto = function() { 
+        alert("inside choosePhoto");
         var options = {
             quality: 100,
             destinationType: Camera.DestinationType.FILE_URI,
@@ -139,34 +140,33 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
             window.resolveLocalFileSystemURI(imageURI, function(fileEntry) {
                 $scope.picData = fileEntry.nativeURL;
                 $scope.ftLoad = true;
-                var image = document.getElementById('myImage');
-                image.src = fileEntry.nativeURL;
+                
                 //Upload Picture
 
                      //uploadPicture
 
-alert("into upload picture");
-       // $ionicLoading.show({template: 'Sto inviando la foto...'});
-        var fileURL = $scope.picData;
-        var options1 = new FileUploadOptions();
-        options1.fileKey = "file";
-        options1.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
-        options1.mimeType = "image/jpeg";
-        options1.chunkedMode = true;
+                alert("into upload picture");
+                // $ionicLoading.show({template: 'Sto inviando la foto...'});
+                var fileURL = $scope.picData;
+                var options1 = new FileUploadOptions();
+                options1.fileKey = "file";
+                options1.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+                options1.mimeType = "image/jpeg";
+                options1.chunkedMode = true;
 
-        var params = {};
-        params.value1 = "someparams";
-        params.value2 = "otherparams";
+                var params = {};
+                params.value1 = "someparams";
+                params.value2 = "otherparams";
 
-        options1.params = params;
+                options1.params = params;
 
-        var ft = new FileTransfer();
-        ft.upload(fileURL, encodeURI("http://21fb43a3.ngrok.com/upload"), function(success) {
-            alert("success"+JSON.stringify(success.response));
-            var fName=options1.fileName; 
-            var link=  "http://21fb43a3.ngrok.com/recognition";
-            alert("File Name"+fName);
-            $http.post(link, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
+                var ft = new FileTransfer();
+                ft.upload(fileURL, encodeURI("http://21fb43a3.ngrok.com/upload"), function(success) {
+                alert("success"+JSON.stringify(success.response));
+                var fName=options1.fileName; 
+                var link=  "http://21fb43a3.ngrok.com/recognition";
+                alert("File Name"+fName);
+                $http.post(link, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
                     
                         alert(JSON.stringify(res.data));
             
@@ -181,42 +181,7 @@ alert("into upload picture");
                 
             }, function errorCallback(response) {
                 alert("ERROR"+JSON.stringify(response));
-        }).finally(function(){
-
-                       alert("INSIDE FINALLY");
-                       alert("inside else and keyword is "+$scope.keywordString);
-
-           var binglink="http://21fb43a3.ngrok.com/searchResults";
-
-           $http.post(binglink, {keywords : $scope.keywordString }).then(function (res){
-                    alert("inside bing search api and keyword is "+$scope.keywordString);
-                    for(var i=0;i<res.data.length;i++) {
-                        alert(res.data[i].Title);
-                        $scope.bingResults.push(res.data[i]);  
-                    }
-                
-            }, function errorCallback(response) {
-                alert("ERROR"+JSON.stringify(response));
-        }).finally(function(){
-            alert("inside another finally");
-                var ocrLink="http://21fb43a3.ngrok.com/ocr"
-                $http.post(ocrLink, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
-                    
-                        alert(JSON.stringify(res.data));
-            
-                    ocrResult=res.data.summary;  
-              
-
-                    if($scope.ocrResults == ""){
-                        $scope.results.push("COULDNT FIND IT");}
-                
-            }, function errorCallback(response) {
-                alert("ERROR"+JSON.stringify(response));
-        });
-
-        });
-
-        });
+        })
         }, 
         function(error) {document.write("error"+JSON.stringify(error));},
          options1);
