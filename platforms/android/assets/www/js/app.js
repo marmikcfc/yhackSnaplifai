@@ -139,7 +139,7 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
 
                      //uploadPicture
 
-        alert("into upload picture");
+alert("into upload picture");
        // $ionicLoading.show({template: 'Sto inviando la foto...'});
         var fileURL = $scope.picData;
         var options1 = new FileUploadOptions();
@@ -154,70 +154,67 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
 
         options1.params = params;
 
-            var keywordString="";
-            var ft = new FileTransfer();
-            ft.upload(fileURL, encodeURI("http://21fb43a3.ngrok.com/upload"), function(success) {
+        var ft = new FileTransfer();
+        ft.upload(fileURL, encodeURI("http://21fb43a3.ngrok.com/upload"), function(success) {
             alert("success"+JSON.stringify(success.response));
             var fName=options1.fileName; 
             var link=  "http://21fb43a3.ngrok.com/recognition";
-            var binglink="http://21fb43a3.ngrok.com/searchResults";
-
             alert("File Name"+fName);
-/*            $http.post(link, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
+            $http.post(link, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
                     
                         alert(JSON.stringify(res.data));
             
             for(var i=0;i<res.data.length;i++) {
                     alert(res.data[i].text);
-                    $scope.results.push(res.data[i].text);
+                    $scope.results.push(res.data[i].text);  
                     $scope.keywordString=$scope.keywordString+res.data[i].text+" ";  
               }
 
                     if($scope.results == ""){
                         $scope.results.push("COULDNT FIND IT");}
-              }, function errorCallback(response) {
+                
+            }, function errorCallback(response) {
                 alert("ERROR"+JSON.stringify(response));
-        });
+        }).finally(function(){
 
-*/
-/*
-var getkeywords = function(){
-  return $http.post(link, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
-                    
-                        alert(JSON.stringify(res.data));
-            
-            for(var i=0;i<res.data.length;i++) {
-                    alert(res.data[i].text);
-                    $scope.results.push(res.data[i].text);
-                    $scope.keywordString=$scope.keywordString+res.data[i].text+" ";  
-              }
+                       alert("INSIDE FINALLY");
+                       alert("inside else and keyword is "+$scope.keywordString);
 
-                    if($scope.results == ""){
-                        $scope.results.push("COULDNT FIND IT");}
-                  //  return $scope.keywordString;
-              }, function errorCallback(response) {
-                alert("ERROR"+JSON.stringify(response));
-        });
-};
+           var binglink="http://21fb43a3.ngrok.com/searchResults";
 
-var getSearchResult = function(){
-  return $http.post(binglink, {keywords : $scope.keywordString }).then(function (res){
+           $http.post(binglink, {keywords : $scope.keywordString }).then(function (res){
                     alert("inside bing search api and keyword is "+$scope.keywordString);
                     for(var i=0;i<res.data.length;i++) {
-                        alert(res.data[i].title);
+                        alert(res.data[i].Title);
                         $scope.bingResults.push(res.data[i]);  
                     }
-                return $scope.bingResults 
+                
+            }, function errorCallback(response) {
+                alert("ERROR"+JSON.stringify(response));
+        }).finally(function(){
+            alert("inside another finally");
+                var ocrLink="http://21fb43a3.ngrok.com/ocr"
+                $http.post(ocrLink, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
+                    
+                        alert(JSON.stringify(res.data));
+            
+                    ocrResult=res.data.summary;  
+              
+
+                    if($scope.ocrResults == ""){
+                        $scope.results.push("COULDNT FIND IT");}
+                
             }, function errorCallback(response) {
                 alert("ERROR"+JSON.stringify(response));
         });
-};
-        getkeywords();
-*/
- 
 
-//end of upload
-       },  function(error) {alert("error"+JSON.stringify(error));}, options1);
+        });
+
+        });
+        }, 
+        function(error) {document.write("error"+JSON.stringify(error));},
+         options1);
+
 
             });
  //           $ionicLoading.show({template: 'Foto acquisita...', duration:500});
