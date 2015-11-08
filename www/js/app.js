@@ -130,7 +130,7 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
       }
 
       $scope.choosePhoto = function() { 
-        alert("inside choosePhoto");
+     //   alert("inside choosePhoto");
         var options = {
             quality: 100,
             destinationType: Camera.DestinationType.FILE_URI,
@@ -146,11 +146,14 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
                 $scope.picData = fileEntry.nativeURL;
                 $scope.ftLoad = true;
                 
+                 $ionicLoading.show({
+                    template: 'loading'
+                });
                 //Upload Picture
 
                      //uploadPicture
 
-                alert("into upload picture");
+       //         alert("into upload picture");
                 // $ionicLoading.show({template: 'Sto inviando la foto...'});
                 var fileURL = $scope.picData;
                 var options1 = new FileUploadOptions();
@@ -167,16 +170,16 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
 
                 var ft = new FileTransfer();
                 ft.upload(fileURL, encodeURI("http://21fb43a3.ngrok.com/upload"), function(success) {
-                alert("success"+JSON.stringify(success.response));
+         //       alert("success"+JSON.stringify(success.response));
                 var fName=options1.fileName; 
                 var link=  "http://21fb43a3.ngrok.com/recognition";
-                alert("File Name"+fName);
+           //     alert("File Name"+fName);
                 $http.post(link, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
                     
-                        alert(JSON.stringify(res.data));
+             //           alert(JSON.stringify(res.data));
             
             for(var i=0;i<res.data.length;i++) {
-                    alert(res.data[i].text);
+               //     alert(res.data[i].text);
                     $scope.results.push(res.data[i].text);  
                     $scope.keywordString=$scope.keywordString+res.data[i].text+" ";  
               }
@@ -185,38 +188,39 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
                         $scope.results.push("COULDNT FIND IT");}
                 
             }, function errorCallback(response) {
-                alert("ERROR"+JSON.stringify(response));
+                //alert("ERROR"+JSON.stringify(response));
         }).finally(function(){
 
-                       alert("INSIDE FINALLY");
-                       alert("inside else and keyword is "+$scope.keywordString);
+                  //     alert("INSIDE FINALLY");
+                  //     alert("inside else and keyword is "+$scope.keywordString);
 
            var binglink="http://21fb43a3.ngrok.com/searchResults";
 
            $http.post(binglink, {keywords : $scope.keywordString }).then(function (res){
-                    alert("inside bing search api and keyword is "+$scope.keywordString);
+                    //alert("inside bing search api and keyword is "+$scope.keywordString);
                     for(var i=0;i<res.data.length;i++) {
-                        alert(res.data[i].Title);
+                      //  alert(res.data[i].Title);
                         $scope.bingResults.push(res.data[i]);  
                     }
                 
             }, function errorCallback(response) {
-                alert("ERROR"+JSON.stringify(response));
+               // alert("ERROR"+JSON.stringify(response));
         }).finally(function(){
-            alert("inside another finally");
+           // alert("inside another finally");
                 var ocrLink="http://21fb43a3.ngrok.com/ocr"
                 $http.post(ocrLink, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
                     
-                        alert(JSON.stringify(res.data));
+             //           alert(JSON.stringify(res.data));
             
                     $scope.ocrResult=res.data.summary;  
               
 
                     if($scope.ocrResults == ""){
                         $scope.results.push("COULDNT FIND IT");}
-                
+                                    $ionicLoading.hide();
+
             }, function errorCallback(response) {
-                alert("ERROR"+JSON.stringify(response));
+               // alert("ERROR"+JSON.stringify(response));
         });
 
         });
