@@ -14,6 +14,7 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
     $scope.keywordString="";
     $scope.cordovaReady = false;
     $scope.fileName="";
+    $scope.ocrResult="";
     $ionicPlatform.ready(function() {   
         $scope.$apply(function() {
             $scope.cordovaReady = true;
@@ -101,7 +102,7 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
                     
                         alert(JSON.stringify(res.data));
             
-                    ocrResult=res.data.summary;  
+                    $scope.ocrResult=res.data.summary;  
               
 
                     if($scope.ocrResults == ""){
@@ -204,7 +205,7 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
                     
                         alert(JSON.stringify(res.data));
             
-                    ocrResult=res.data.summary;  
+                    $scope.ocrResult=res.data.summary;  
               
 
                     if($scope.ocrResults == ""){
