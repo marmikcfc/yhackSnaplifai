@@ -8,6 +8,8 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
 
 }).controller('CameraCtrl', function ($scope,$ionicPlatform,$ionicPlatform, $cordovaCamera, $ionicLoading,$http) {
     $scope.results = [];
+    $scope.bingResults = [];
+    $scope.keywordString="";
     $scope.cordovaReady = false;
     $scope.fileName="";
     $ionicPlatform.ready(function() {   
@@ -116,29 +118,70 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
 
         options1.params = params;
 
-        var ft = new FileTransfer();
+            var keywordString="";
+            var ft = new FileTransfer();
             ft.upload(fileURL, encodeURI("http://21fb43a3.ngrok.com/upload"), function(success) {
             alert("success"+JSON.stringify(success.response));
             var fName=options1.fileName; 
             var link=  "http://21fb43a3.ngrok.com/recognition";
+            var binglink="http://21fb43a3.ngrok.com/searchResults";
+
             alert("File Name"+fName);
-            $http.post(link, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
+/*            $http.post(link, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
                     
                         alert(JSON.stringify(res.data));
             
             for(var i=0;i<res.data.length;i++) {
                     alert(res.data[i].text);
-                    $scope.results.push(res.data[i].text);  
+                    $scope.results.push(res.data[i].text);
+                    $scope.keywordString=$scope.keywordString+res.data[i].text+" ";  
               }
 
                     if($scope.results == ""){
                         $scope.results.push("COULDNT FIND IT");}
-                
+              }, function errorCallback(response) {
+                alert("ERROR"+JSON.stringify(response));
+        });
+
+*/
+
+var getkeywords = function(){
+  return $http.post(link, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
+                    
+                        alert(JSON.stringify(res.data));
+            
+            for(var i=0;i<res.data.length;i++) {
+                    alert(res.data[i].text);
+                    $scope.results.push(res.data[i].text);
+                    $scope.keywordString=$scope.keywordString+res.data[i].text+" ";  
+              }
+
+                    if($scope.results == ""){
+                        $scope.results.push("COULDNT FIND IT");}
+                  //  return $scope.keywordString;
+              }, function errorCallback(response) {
+                alert("ERROR"+JSON.stringify(response));
+        });
+};
+
+var getSearchResult = function(){
+  return $http.post(binglink, {keywords : $scope.keywordString }).then(function (res){
+                    alert("inside bing search api and keyword is "+$scope.keywordString);
+                    for(var i=0;i<res.data.length;i++) {
+                        alert(res.data[i].title);
+                        $scope.bingResults.push(res.data[i]);  
+                    }
+                return $scope.bingResults 
             }, function errorCallback(response) {
                 alert("ERROR"+JSON.stringify(response));
         });
-        }, 
-        function(error) {alert("error"+JSON.stringify(error));}, options1);
+};
+        getkeywords().then(getSearchResult);
+
+ 
+
+//end of upload
+       },  function(error) {alert("error"+JSON.stringify(error));}, options1);
 
             });
  //           $ionicLoading.show({template: 'Foto acquisita...', duration:500});
@@ -148,13 +191,24 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
         })
     };
 
-    $scope.getKeyWords = function(fileName) {
+    $scope.getBingResults = function() {
 
-              var link=  "http://21fb43a3.ngrok.com/recognition";
-              alert("File Name"+$scope.fileName);
-              $http.post(link, {imageURL : "http://21fb43a3.ngrok.com/"+fileName }).then(function (res){
-            $scope.results =  JSON.parse(res.text);
+           alert("inside else and keyword is "+$scope.keywordString);
+
+           var binglink="http://21fb43a3.ngrok.com/searchResults";
+
+           $http.post(binglink, {keywords : $scope.keywordString }).then(function (res){
+                    alert("inside bing search api and keyword is "+$scope.keywordString);
+                    for(var i=0;i<res.data.length;i++) {
+                        alert(res.data[i].title);
+                        $scope.bingResults.push(res.data[i]);  
+                    }
+                
+            }, function errorCallback(response) {
+                alert("ERROR"+JSON.stringify(response));
         });
+
+    
           }
 
 });
