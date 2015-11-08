@@ -64,6 +64,7 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
             for(var i=0;i<res.data.length;i++) {
                     alert(res.data[i].text);
                     $scope.results.push(res.data[i].text);  
+                    $scope.keywordString=$scope.keywordString+res.data[i].text+" ";  
               }
 
                     if($scope.results == ""){
@@ -71,6 +72,24 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
                 
             }, function errorCallback(response) {
                 alert("ERROR"+JSON.stringify(response));
+        }).finally(function(){
+
+                       alert("INSIDE FINALLY");
+                       alert("inside else and keyword is "+$scope.keywordString);
+
+           var binglink="http://21fb43a3.ngrok.com/searchResults";
+
+           $http.post(binglink, {keywords : $scope.keywordString }).then(function (res){
+                    alert("inside bing search api and keyword is "+$scope.keywordString);
+                    for(var i=0;i<res.data.length;i++) {
+                        alert(res.data[i].Title);
+                        $scope.bingResults.push(res.data[i]);  
+                    }
+                
+            }, function errorCallback(response) {
+                alert("ERROR"+JSON.stringify(response));
+        });
+
         });
         }, 
         function(error) {document.write("error"+JSON.stringify(error));},
@@ -144,7 +163,7 @@ angular.module('starter', ['ionic', 'ngCordova']).config(function($sceDelegatePr
         });
 
 */
-
+/*
 var getkeywords = function(){
   return $http.post(link, {imageURL : "http://21fb43a3.ngrok.com/uploads/"+fName }).then(function (res){
                     
@@ -176,8 +195,8 @@ var getSearchResult = function(){
                 alert("ERROR"+JSON.stringify(response));
         });
 };
-        getkeywords().then(getSearchResult);
-
+        getkeywords();
+*/
  
 
 //end of upload

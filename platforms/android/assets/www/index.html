@@ -32,6 +32,12 @@
                         <ion-list class="list-inset">
                     <ion-item ng-repeat="result in results">{{result}}</ion-item>
                 </ion-list>
+
+
+                <ion-list class="list-inset">
+                    <ion-item ng-repeat="result in bingResults"> <a ng-href="{{result.Url}}"></a> {{result.Title}} <br />
+                    {{result.Description}}</ion-item>
+                </ion-list>
     </center>
     </ion-content>
 </body>
